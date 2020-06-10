@@ -2,40 +2,65 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\UsersService;
-use App\User;
+use DB;
+use App\Contact;
 use Illuminate\Http\Request;
+use App\Http\Services\AddressService;
+use App\Http\Services\ContactsService;
+use App\Http\Services\Params\AddressParams;
+use App\Http\Services\Params\ContactParams;
 
-class UsersController extends Controller
+class ContactsController extends Controller
 {
     /**
-     * @var User
+     * @var Contact
      */
-    private $user;
+    private $contact;
 
     /**
-     * @var UsersService
+     * @var ContactsService
      */
-    private $usersService;
+    private $contactsService;
 
-    /*
-     * @param User $user
+    /**
+     * @var AddressService
      */
-    public function __construct(User $user, UsersService $usersService)
-    {
-        $this->user = $user;
-        $this->usersService = $usersService;
+    private $addressService;
+
+    /**
+     * @param Contact $contact
+     * @param ContactsService $contactsService
+     * @param AddressService $addressService
+     */
+    public function __construct(
+        Contact $contact,
+        ContactsService $contactsService,
+        AddressService $addressService
+    ) {
+        $this->contact = $contact;
+        $this->contactsService = $contactsService;
+        $this->addressService = $addressService;
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        $users = $this->user->all();
-        return view('users', compact('users'));
+        $contacts = $this->contact->all();
+        return view('contacts', compact('contacts'));
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
-        return view('form');
+        return view('contactsForm');
     }
 
     /**
@@ -46,8 +71,9 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        $user = $this->usersService->create($request->all());
-        dd($user);
+        $this->contactsService->create($request);
+
+        return redirect('/contacts');
     }
 
     /**
@@ -81,7 +107,7 @@ class UsersController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //Contacts
+        //
     }
 
     /**

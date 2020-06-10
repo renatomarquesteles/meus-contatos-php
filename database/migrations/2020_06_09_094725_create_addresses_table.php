@@ -21,7 +21,7 @@ class CreateAddressesTable extends Migration
             $table->string('neighborhood');
             $table->string('street');
             $table->integer('number');
-            $table->integer('complement')->nullable();
+            $table->string('complement')->nullable();
             $table->timestamps();
         });
     }

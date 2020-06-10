@@ -18,9 +18,9 @@ class Contact extends Model
         'name',
         'email',
         'phone',
+        'avatar',
         'user_id',
         'address_id',
-        'avatar_id',
     ];
 
     /**
@@ -37,13 +37,5 @@ class Contact extends Model
     public function address()
     {
         $this->belongsTo('App\Address');
-    }
-
-    /**
-     * Get the contact's address
-     */
-    public function avatar()
-    {
-        $this->belongsTo('App\File');
     }
 }
