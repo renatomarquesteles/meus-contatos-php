@@ -14,7 +14,7 @@
             <div class="card">
                 <div class="card-header">Lista de Contatos</div>
                 <div class="card-body">
-                    @isset($contacts)
+                    @if(!$contacts->isEmpty())
                     <table class="table table-borderless table-hover">
                         <thead>
                             <tr>
@@ -37,10 +37,9 @@
                             @endforeach
                         </tbody>
                     </table>
-                    @endisset
-                    @empty($contacts)
+                    @else
                     <p>Nenhum contato encontrado.</p>
-                    @endempty
+                    @endif
                 </div>
             </div>
         </div>
