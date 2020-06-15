@@ -40,6 +40,7 @@ class ContactsController extends Controller
         $this->contact = $contact;
         $this->contactsService = $contactsService;
         $this->addressService = $addressService;
+        $this->middleware('auth');
     }
 
     /**
@@ -49,7 +50,8 @@ class ContactsController extends Controller
      */
     public function index()
     {
-        $contacts = $this->contact->all();
+        $userId = auth()->user()->id;
+        $contacts = $this->contact->where('user_id', $userId)->get();
         return view('contacts', compact('contacts'));
     }
 
