@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -32,6 +32,6 @@ class User extends Authenticatable
      */
     public function contacts()
     {
-        return $this->hasMany('App\Contact');
+        return $this->hasMany('App\Models\Contact');
     }
 }

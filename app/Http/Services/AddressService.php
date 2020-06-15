@@ -3,7 +3,7 @@
 namespace App\Http\Services;
 
 use DB;
-use App\Address;
+use App\Models\Address;
 use App\Http\Services\Params\AddressParams;
 
 class AddressService

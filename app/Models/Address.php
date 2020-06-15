@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,6 +26,6 @@ class Address extends Model
      */
     public function contacts()
     {
-        return $this->hasMany('App\Contact');
+        return $this->hasMany('App\Models\Contact');
     }
 }

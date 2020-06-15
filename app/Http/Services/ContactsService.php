@@ -3,8 +3,8 @@
 namespace App\Http\Services;
 
 use DB;
-use App\Address;
-use App\Contact;
+use App\Models\Address;
+use App\Models\Contact;
 use App\Http\Services\Params\AddressParams;
 use App\Http\Services\Params\ContactParams;
 
