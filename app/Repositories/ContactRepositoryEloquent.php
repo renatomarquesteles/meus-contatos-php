@@ -44,4 +44,34 @@ class ContactRepositoryEloquent extends BaseRepository implements ContactReposit
         $contact = $this->model->create($params);
         return $contact;
     }
+
+    public function findContact($contactId)
+    {
+        $contact = $this->model->find($contactId);
+        return $contact;
+    }
+
+    public function updateContact($params, $contactId)
+    {
+        $contact = $this->model->find($contactId);
+        if ($params->name) {
+            $contact->name = $params->name;
+        }
+        if ($params->phone) {
+            $contact->phone = $params->phone;
+        }
+        if ($params->email) {
+            $contact->email = $params->email;
+        }
+        $contact->save();
+        return $contact;
+    }
+
+    public function deleteContact($contactId)
+    {
+        $contact = $this->model->find($contactId);
+        $contactName = $contact->name;
+        $contact->delete();
+        return $contactName;
+    }
 }

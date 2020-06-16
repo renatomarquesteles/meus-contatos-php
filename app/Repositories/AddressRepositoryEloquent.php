@@ -40,4 +40,10 @@ class AddressRepositoryEloquent extends BaseRepository implements AddressReposit
         $address = $this->model->create($params);
         return $address;
     }
+
+    public function updateAddress($params, $addressId)
+    {
+        $address = $this->model->find($params->id);
+        return $address;
+    }
 }

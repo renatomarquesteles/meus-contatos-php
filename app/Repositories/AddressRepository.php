@@ -12,4 +12,5 @@ use Prettus\Repository\Contracts\RepositoryInterface;
 interface AddressRepository extends RepositoryInterface
 {
     public function createAddress($params);
+    public function updateAddress($params);
 }

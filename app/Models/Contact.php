@@ -36,7 +36,7 @@ class Contact extends Model implements Transformable
      */
     public function user()
     {
-        $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     /**
@@ -44,6 +44,6 @@ class Contact extends Model implements Transformable
      */
     public function address()
     {
-        $this->belongsTo('App\Models\Address');
+        return $this->belongsTo('App\Models\Address');
     }
 }

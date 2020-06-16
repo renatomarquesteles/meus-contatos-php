@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ContactStoreRequest;
+use App\Http\Requests\ContactUpdateRequest;
 use App\Models\Contact;
 use App\Http\Services\ContactsService;
 
@@ -34,7 +35,7 @@ class ContactsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return mixed
      */
     public function index()
     {
@@ -55,7 +56,7 @@ class ContactsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return mixed
      */
     public function create()
     {
@@ -65,8 +66,8 @@ class ContactsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param ContactStoreRequest $contactStoreRequest
+     * @return mixed
      */
     public function store(ContactStoreRequest $contactStoreRequest)
     {
@@ -84,6 +85,68 @@ class ContactsController extends Controller
 
         return redirect('/contacts')->withSuccess(
             'Contato ' . $contactName . ' criado com sucesso!'
+        );
+    }
+
+     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param int $contactId
+     * @return mixed
+     */
+    public function edit($contactId)
+    {
+        $contactResponse = $this->contactsService->find($contactId);
+        $contact = $contactResponse->data;
+        $address = $contact->address()->get()->first();
+        return view('contactsFormEdit', compact('contact', 'address'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \App\Http\Requests\ContactUpdateRequest $contactUpdateRequest
+     * @param int $contactId
+     * @return mixed
+     */
+    public function update(
+        ContactUpdateRequest $contactUpdateRequest,
+        $contactId
+    ) {
+        $contactsServiceResponse = $this->contactsService->update(
+            $contactUpdateRequest,
+            $contactId
+        );
+
+        if (!$contactsServiceResponse->success) {
+            return redirect(url()->previous())->withError(
+                $contactsServiceResponse->message
+            );
+        }
+
+        return redirect('/contacts')->withSuccess(
+            $contactsServiceResponse->message
+        );
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param int $contactId
+     * @return mixed
+     */
+    public function destroy($contactId)
+    {
+        $contactsServiceResponse = $this->contactsService->delete($contactId);
+
+        if (!$contactsServiceResponse->success) {
+            return redirect(url()->previous())->withError(
+                $contactsServiceResponse->message
+            );
+        }
+
+        return redirect('/contacts')->withSuccess(
+            $contactsServiceResponse->message
         );
     }
 }

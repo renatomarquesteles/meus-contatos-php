@@ -65,12 +65,16 @@ class ContactsService
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function find($contactId)
+    {
+        try {
+            $contact = $this->contactRepository->findContact($contactId);
+            return new ServiceResponse(true, 'Contato encontrado', $contact);
+        } catch (\Throwable $th) {
+            return new ServiceResponse(false, 'Erro ao buscar contato', $th);
+        }
+    }
+
     public function create($params)
     {
         DB::beginTransaction();
@@ -133,6 +137,81 @@ class ContactsService
         } catch (\Throwable $th) {
             DB::rollback();
             return new ServiceResponse(false, 'Erro ao criar endereço', $th);
+        }
+    }
+
+    public function update($params, $contactId)
+    {
+        DB::beginTransaction();
+        try {
+            $addressParams = new AddressParams(
+                $params->zipcode,
+                $params->street,
+                $params->number,
+                $params->neighborhood,
+                $params->city,
+                $params->state,
+                $params->complement ?? null
+            );
+
+            $addressResponse = $this->updateAddress($addressParams);
+
+            if (!$addressResponse->success) {
+                return $addressResponse;
+            }
+
+            $contact = $this->contactRepository->updateContact(
+                $params,
+                $contactId
+            );
+
+            DB::commit();
+
+            $contactName = $contact->name;
+
+            return new ServiceResponse(
+                true,
+                'Contato ' . $contactName . ' atualizado com sucesso!',
+                $contact
+            );
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return new ServiceResponse(false, 'Erro ao atualizar contato', $th);
+        }
+    }
+
+    public function updateAddress(AddressParams $params)
+    {
+        try {
+            $address = $this->addressRepository->updateAddress(
+                $params->toArray()
+            );
+
+            return new ServiceResponse(
+                true,
+                'Endereço atualizado com sucesso',
+                $address
+            );
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return new ServiceResponse(
+                false,
+                'Erro ao atualizar endereço',
+                $th
+            );
+        }
+    }
+
+    public function delete($contactId)
+    {
+        try {
+            $contactName = $this->contactRepository->deleteContact($contactId);
+            return new ServiceResponse(
+                true,
+                'Contato ' . $contactName . ' removido com sucesso!'
+            );
+        } catch (\Throwable $th) {
+            return new ServiceResponse(false, 'Erro ao remover contato', $th);
         }
     }
 }
