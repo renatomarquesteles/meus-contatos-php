@@ -5,9 +5,11 @@ namespace App\Http\Services;
 use DB;
 use App\Models\Address;
 use App\Models\Contact;
+use App\Repositories\AddressRepository;
+use App\Repositories\ContactRepository;
 use App\Http\Services\Params\AddressParams;
 use App\Http\Services\Params\ContactParams;
-use App\Repositories\ContactRepository;
+use App\Http\Services\Responses\ServiceResponse;
 
 class ContactsService
 {
@@ -27,24 +29,40 @@ class ContactsService
     private $contactRepository;
 
     /**
+     * @var AddressRepository
+     */
+    private $addressRepository;
+
+    /**
      * @param Contact $contact
      * @param Address $address
      * @param ContactRepository $contactRepository
+     * @param AddressRepository $addressRepository
      */
     public function __construct(
         Contact $contact,
         Address $address,
-        ContactRepository $contactRepository
+        ContactRepository $contactRepository,
+        AddressRepository $addressRepository
     ) {
         $this->contact = $contact;
         $this->address = $address;
         $this->contactRepository = $contactRepository;
+        $this->addressRepository = $addressRepository;
     }
 
     public function all($userId)
     {
-        $contacts = $this->contactRepository->allContacts($userId);
-        return $contacts;
+        try {
+            $contacts = $this->contactRepository->allContacts($userId);
+        } catch (\Throwable $th) {
+            return new ServiceResponse(false, 'Erro ao buscar contatos', $th);
+        }
+        return new ServiceResponse(
+            true,
+            'Contatos listados com sucesso',
+            $contacts
+        );
     }
 
     /**
@@ -67,7 +85,13 @@ class ContactsService
                 $params->complement ?? null
             );
 
-            $address = $this->createAddress($addressParams);
+            $addressResponse = $this->createAddress($addressParams);
+
+            if (!$addressResponse->success) {
+                return $addressResponse;
+            }
+
+            $address = $addressResponse->data;
 
             $contactParams = new ContactParams(
                 auth()->user()->id,
@@ -77,24 +101,38 @@ class ContactsService
                 $address->id
             );
 
-            $contact = $this->contactRepository->createContact($contactParams->toArray());
+            $contact = $this->contactRepository->createContact(
+                $contactParams->toArray()
+            );
+
             DB::commit();
 
-            return $contact;
+            return new ServiceResponse(
+                true,
+                'Contato criado com sucesso',
+                $contact
+            );
         } catch (\Throwable $th) {
             DB::rollback();
-            dd($th);
+            return new ServiceResponse(false, 'Erro ao criar contato', $th);
         }
     }
 
     public function createAddress(AddressParams $params)
     {
         try {
-            $address = $this->address->create($params->toArray());
-            return $address;
+            $address = $this->addressRepository->createAddress(
+                $params->toArray()
+            );
+
+            return new ServiceResponse(
+                true,
+                'Endereço criado com sucesso',
+                $address
+            );
         } catch (\Throwable $th) {
             DB::rollback();
-            dd($th);
+            return new ServiceResponse(false, 'Erro ao criar endereço', $th);
         }
     }
 }

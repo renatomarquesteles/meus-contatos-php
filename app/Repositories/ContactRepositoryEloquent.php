@@ -25,7 +25,6 @@ class ContactRepositoryEloquent extends BaseRepository implements ContactReposit
         return Contact::class;
     }
 
-
     /**
      * Boot up the repository, pushing criteria
      */

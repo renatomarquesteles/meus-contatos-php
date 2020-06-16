@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ContactStoreRequest;
 use App\Models\Contact;
-use Illuminate\Http\Request;
 use App\Http\Services\ContactsService;
 
 class ContactsController extends Controller
@@ -39,7 +39,16 @@ class ContactsController extends Controller
     public function index()
     {
         $userId = auth()->user()->id;
-        $contacts = $this->contactsService->all($userId);
+        $contactsServiceResponse = $this->contactsService->all($userId);
+
+        if (!$contactsServiceResponse->success) {
+            return redirect(url()->previous())->withError(
+                $contactsServiceResponse->message
+            );
+        }
+
+        $contacts = $contactsServiceResponse->data;
+
         return view('contacts', compact('contacts'));
     }
 
@@ -59,10 +68,22 @@ class ContactsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ContactStoreRequest $contactStoreRequest)
     {
-        $this->contactsService->create($request);
+        $contactsServiceResponse = $this->contactsService->create(
+            $contactStoreRequest
+        );
 
-        return redirect('/contacts');
+        if (!$contactsServiceResponse->success) {
+            return redirect(url()->previous())->withError(
+                $contactsServiceResponse->message
+            );
+        }
+
+        $contactName = $contactsServiceResponse->data->name;
+
+        return redirect('/contacts')->withSuccess(
+            'Contato ' . $contactName . ' criado com sucesso!'
+        );
     }
 }
