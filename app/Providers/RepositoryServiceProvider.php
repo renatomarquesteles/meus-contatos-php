@@ -13,7 +13,14 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(\App\Repositories\ContactRepository::class, \App\Repositories\ContactRepositoryEloquent::class);
+        $this->app->bind(
+            \App\Repositories\ContactRepository::class,
+            \App\Repositories\ContactRepositoryEloquent::class
+        );
+        $this->app->bind(
+            \App\Repositories\AddressRepository::class,
+            \App\Repositories\AddressRepositoryEloquent::class
+        );
     }
 
     /**
