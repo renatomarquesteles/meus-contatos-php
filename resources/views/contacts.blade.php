@@ -14,7 +14,7 @@
             <div class="card">
                 <div class="card-header">Lista de Contatos</div>
                 <div class="card-body">
-                    @if(!$contacts->isEmpty())
+                    @if(!empty($contacts))
                     <table class="table table-borderless table-hover">
                         <thead>
                             <tr>

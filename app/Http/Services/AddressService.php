@@ -3,8 +3,9 @@
 namespace App\Http\Services;
 
 use DB;
-use App\Address;
+use App\Models\Address;
 use App\Http\Services\Params\AddressParams;
+use App\Repositories\AddressRepository;
 
 class AddressService
 {
@@ -13,12 +14,18 @@ class AddressService
      */
     private $address;
 
+    /**
+     * @var AddressRepository
+     */
+    private $addressRepository;
+
     /*
      * @param Contact $contact
      */
-    public function __construct(Address $address)
+    public function __construct(Address $address, AddressRepository $addressRepository)
     {
         $this->address = $address;
+        $this->addressRepository = $addressRepository;
     }
 
     /**
@@ -30,7 +37,7 @@ class AddressService
     public function create(AddressParams $params)
     {
         try {
-            $address = $this->address->create($params->toArray());
+            $address = $this->addressRepository->createAddress($params->toArray());
             return $address;
         } catch (\Throwable $th) {
             DB::rollback();

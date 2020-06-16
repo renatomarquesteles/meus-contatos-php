@@ -2,7 +2,8 @@
 
 namespace App\Http\Services;
 
-use App\User;
+use App\Models\User;
+use App\Repositories\UserRepository;
 
 class UsersService
 {
@@ -11,12 +12,18 @@ class UsersService
      */
     private $user;
 
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
+
     /*
      * @param User $user
      */
-    public function __construct(User $user)
+    public function __construct(User $user, UserRepository $userRepository)
     {
         $this->user = $user;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -28,7 +35,7 @@ class UsersService
     public function create($params)
     {
         try {
-            $user = $this->user->create($params);
+            $user = $this->userRepository->createUser($params);
             return $user;
         } catch (\Throwable $th) {
             return false;

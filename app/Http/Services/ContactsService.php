@@ -3,10 +3,11 @@
 namespace App\Http\Services;
 
 use DB;
-use App\Address;
-use App\Contact;
+use App\Models\Address;
+use App\Models\Contact;
 use App\Http\Services\Params\AddressParams;
 use App\Http\Services\Params\ContactParams;
+use App\Repositories\ContactRepository;
 
 class ContactsService
 {
@@ -14,18 +15,36 @@ class ContactsService
      * @var Contact
      */
     private $contact;
+
     /**
      * @var Address
      */
     private $address;
 
-    /*
-     * @param Contact $contact
+    /**
+     * @var ContactRepository
      */
-    public function __construct(Contact $contact, Address $address)
-    {
+    private $contactRepository;
+
+    /**
+     * @param Contact $contact
+     * @param Address $address
+     * @param ContactRepository $contactRepository
+     */
+    public function __construct(
+        Contact $contact,
+        Address $address,
+        ContactRepository $contactRepository
+    ) {
         $this->contact = $contact;
         $this->address = $address;
+        $this->contactRepository = $contactRepository;
+    }
+
+    public function all($userId)
+    {
+        $contacts = $this->contactRepository->allContacts($userId);
+        return $contacts;
     }
 
     /**
@@ -58,7 +77,7 @@ class ContactsService
                 $address->id
             );
 
-            $contact = $this->contact->create($contactParams->toArray());
+            $contact = $this->contactRepository->createContact($contactParams->toArray());
             DB::commit();
 
             return $contact;
