@@ -39,4 +39,10 @@ class ContactRepositoryEloquent extends BaseRepository implements ContactReposit
         $contacts = $this->model->where('user_id', $userId)->get();
         return $contacts;
     }
+
+    public function createContact($params)
+    {
+        $contact = $this->model->create($params);
+        return $contact;
+    }
 }

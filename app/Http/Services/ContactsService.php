@@ -77,7 +77,7 @@ class ContactsService
                 $address->id
             );
 
-            $contact = $this->contact->create($contactParams->toArray());
+            $contact = $this->contactRepository->createContact($contactParams->toArray());
             DB::commit();
 
             return $contact;

@@ -12,4 +12,5 @@ use Prettus\Repository\Contracts\RepositoryInterface;
 interface ContactRepository extends RepositoryInterface
 {
     public function allContacts($userId);
+    public function createContact($params);
 }
