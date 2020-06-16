@@ -21,6 +21,11 @@ class RepositoryServiceProvider extends ServiceProvider
             \App\Repositories\AddressRepository::class,
             \App\Repositories\AddressRepositoryEloquent::class
         );
+
+        $this->app->bind(
+            \App\Repositories\UserRepository::class,
+            \App\Repositories\UserRepositoryEloquent::class
+        );
     }
 
     /**
