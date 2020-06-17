@@ -122,11 +122,11 @@ class ContactsService
         }
     }
 
-    public function createAddress(AddressParams $params)
+    public function createAddress(AddressParams $addressParams)
     {
         try {
             $address = $this->addressRepository->createAddress(
-                $params->toArray()
+                $addressParams->toArray()
             );
 
             return new ServiceResponse(
@@ -154,25 +154,35 @@ class ContactsService
                 $params->complement ?? null
             );
 
-            $addressResponse = $this->updateAddress($addressParams);
+            $contact = $this->contactRepository->findContact($contactId);
+            $addressId = $contact->address_id;
+            $addressResponse = $this->updateAddress($addressParams, $addressId);
 
             if (!$addressResponse->success) {
                 return $addressResponse;
             }
 
-            $contact = $this->contactRepository->updateContact(
-                $params,
+            $contactParams = new ContactParams(
+                auth()->user()->id,
+                $params->name,
+                $params->email,
+                $params->phone,
+                $addressId
+            );
+
+            $updatedContact = $this->contactRepository->updateContact(
+                $contactParams,
                 $contactId
             );
 
             DB::commit();
 
-            $contactName = $contact->name;
+            $contactName = $updatedContact->name;
 
             return new ServiceResponse(
                 true,
                 'Contato ' . $contactName . ' atualizado com sucesso!',
-                $contact
+                $updatedContact
             );
         } catch (\Throwable $th) {
             DB::rollback();
@@ -180,11 +190,12 @@ class ContactsService
         }
     }
 
-    public function updateAddress(AddressParams $params)
+    public function updateAddress(AddressParams $addressParams, $addressId)
     {
         try {
             $address = $this->addressRepository->updateAddress(
-                $params->toArray()
+                $addressParams,
+                $addressId
             );
 
             return new ServiceResponse(

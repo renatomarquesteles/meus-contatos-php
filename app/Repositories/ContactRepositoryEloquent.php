@@ -39,9 +39,9 @@ class ContactRepositoryEloquent extends BaseRepository implements ContactReposit
         return $contacts;
     }
 
-    public function createContact($params)
+    public function createContact($contactParams)
     {
-        $contact = $this->model->create($params);
+        $contact = $this->model->create($contactParams);
         return $contact;
     }
 
@@ -51,17 +51,17 @@ class ContactRepositoryEloquent extends BaseRepository implements ContactReposit
         return $contact;
     }
 
-    public function updateContact($params, $contactId)
+    public function updateContact($contactParams, $contactId)
     {
         $contact = $this->model->find($contactId);
-        if ($params->name) {
-            $contact->name = $params->name;
+        if ($contactParams->name) {
+            $contact->name = $contactParams->name;
         }
-        if ($params->phone) {
-            $contact->phone = $params->phone;
+        if ($contactParams->phone) {
+            $contact->phone = $contactParams->phone;
         }
-        if ($params->email) {
-            $contact->email = $params->email;
+        if ($contactParams->email) {
+            $contact->email = $contactParams->email;
         }
         $contact->save();
         return $contact;

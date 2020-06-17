@@ -35,15 +35,35 @@ class AddressRepositoryEloquent extends BaseRepository implements AddressReposit
         $this->pushCriteria(app(RequestCriteria::class));
     }
 
-    public function createAddress($params)
+    public function createAddress($addressParams)
     {
-        $address = $this->model->create($params);
+        $address = $this->model->create($addressParams);
         return $address;
     }
 
-    public function updateAddress($params, $addressId)
+    public function updateAddress($addressParams, $addressId)
     {
-        $address = $this->model->find($params->id);
+        $address = $this->model->find($addressId);
+        if ($addressParams->zipcode) {
+            $address->zipcode = $addressParams->zipcode;
+        }
+        if ($addressParams->street) {
+            $address->street = $addressParams->street;
+        }
+        if ($addressParams->number) {
+            $address->number = $addressParams->number;
+        }
+        if ($addressParams->neighborhood) {
+            $address->neighborhood = $addressParams->neighborhood;
+        }
+        if ($addressParams->city) {
+            $address->city = $addressParams->city;
+        }
+        if ($addressParams->state) {
+            $address->state = $addressParams->state;
+        }
+        $address->complement = $addressParams->complement;
+        $address->save();
         return $address;
     }
 }
