@@ -24,19 +24,33 @@ class ContactStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'       => 'required|string',
-            'email'      => 'required|email:rfc,dns',
-            'phone'      => 'required|string',
+            'name'         => 'required|string',
+            'email'        => 'required|email:rfc,dns',
+            'phone'        => 'required|string',
+            'zipcode'      => 'required|string',
+            'street'       => 'required|string',
+            'number'       => 'required|numeric',
+            'neighborhood' => 'required|string',
+            'complement'   => 'nullable|string',
+            'city'         => 'required|string',
+            'state'        => 'required|string|max:2',
         ];
     }
 
     public function messages()
     {
         return [
-            'name.required'  => 'O nome é obrigatório',
-            'email.required' => 'O e-mail é obrigatório',
-            'email.email'    => 'E-mail inválido',
-            'phone.required' => 'O telefone é obrigatório'
+            'name.required'         => 'O nome é obrigatório',
+            'email.required'        => 'O e-mail é obrigatório',
+            'email.email'           => 'E-mail inválido',
+            'phone.required'        => 'O telefone é obrigatório',
+            'zipcode.required'      => 'O CEP é obrigatório',
+            'street.required'       => 'O logradouro é obrigatório',
+            'number.required'       => 'O número é obrigatório',
+            'neighborhood.required' => 'O bairro é obrigatório',
+            'city.required'         => 'A cidade é obrigatória',
+            'state.required'        => 'O estado é obrigatório',
+            'state.max'             => 'O estado deve conter apenas 2 dígitos',
         ];
     }
 }
