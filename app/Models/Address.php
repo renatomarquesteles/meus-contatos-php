@@ -1,11 +1,20 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Prettus\Repository\Contracts\Transformable;
+use Prettus\Repository\Traits\TransformableTrait;
 
-class Address extends Model
+/**
+ * Class Address.
+ *
+ * @package namespace App\Models;
+ */
+class Address extends Model implements Transformable
 {
+    use TransformableTrait;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -26,6 +35,6 @@ class Address extends Model
      */
     public function contacts()
     {
-        return $this->hasMany('App\Contact');
+        return $this->hasMany('App\Models\Contact');
     }
 }

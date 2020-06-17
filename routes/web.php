@@ -15,8 +15,9 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-
 Route::get('/contacts', 'ContactsController@index');
 Route::get('/contacts/new', 'ContactsController@create');
 Route::post('/contacts', 'ContactsController@store');
+Route::get('/contacts/{contactId}/edit', 'ContactsController@edit');
+Route::put('/contacts/{contactId}', 'ContactsController@update');
+Route::delete('/contacts/{contactId}', 'ContactsController@destroy');

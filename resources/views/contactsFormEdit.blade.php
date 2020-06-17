@@ -10,7 +10,8 @@
                 <div class="card-header">Criar novo contato</div>
 
                 <div class="card-body">
-                    <form action="/contacts" method="POST">
+                    <form action="/contacts/{{ $contact->id }}" method="POST">
+                        @method('PUT')
                         @csrf
                         <p><strong>Dados pessoais</strong></p>
                         <div class="form-group">
@@ -20,6 +21,7 @@
                                 class="form-control"
                                 id="name"
                                 name="name"
+                                value="{{ $contact->name ?? '' }}"
                                 required
                                 autofocus
                             />
@@ -32,6 +34,7 @@
                                 id="email"
                                 name="email"
                                 placeholder="nome@exemplo.com"
+                                value="{{ $contact->email ?? '' }}"
                                 required
                             />
                         </div>
@@ -43,6 +46,7 @@
                                 id="phone"
                                 name="phone"
                                 placeholder="(99)99999-9999"
+                                value="{{ $contact->phone ?? '' }}"
                                 required
                             />
                         </div>
@@ -58,6 +62,7 @@
                                 id="zipcode"
                                 name="zipcode"
                                 placeholder="99999-999"
+                                value="{{ $address->zipcode ?? '' }}"
                                 required
                             />
                             <div class="invalid-feedback">
@@ -73,6 +78,7 @@
                                         class="form-control"
                                         id="street"
                                         name="street"
+                                        value="{{ $address->street ?? '' }}"
                                         required
                                     />
                                     <div class="invalid-feedback">
@@ -86,6 +92,7 @@
                                         class="form-control"
                                         id="number"
                                         name="number"
+                                        value="{{ $address->number ?? '' }}"
                                         required
                                     />
                                     <div class="invalid-feedback">
@@ -101,6 +108,7 @@
                                 class="form-control"
                                 id="complement"
                                 name="complement"
+                                value="{{ $address->complement ?? '' }}"
                             />
                         </div>
                         <div class="form-group">
@@ -110,6 +118,7 @@
                                 class="form-control"
                                 id="neighborhood"
                                 name="neighborhood"
+                                value="{{ $address->neighborhood ?? '' }}"
                                 required
                             />
                             <div class="invalid-feedback">
@@ -125,6 +134,7 @@
                                         class="form-control"
                                         id="city"
                                         name="city"
+                                        value="{{ $address->city ?? '' }}"
                                         required
                                     />
                                     <div class="invalid-feedback">
@@ -138,6 +148,7 @@
                                         class="form-control"
                                         id="state"
                                         name="state"
+                                        value="{{ $address->state ?? '' }}"
                                         required
                                     />
                                     <div class="invalid-feedback">

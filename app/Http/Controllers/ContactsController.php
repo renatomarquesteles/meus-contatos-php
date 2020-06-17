@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use DB;
-use App\Contact;
-use Illuminate\Http\Request;
-use App\Http\Services\AddressService;
+use App\Http\Requests\ContactStoreRequest;
+use App\Http\Requests\ContactUpdateRequest;
+use App\Models\Contact;
 use App\Http\Services\ContactsService;
-use App\Http\Services\Params\AddressParams;
-use App\Http\Services\Params\ContactParams;
 
 class ContactsController extends Controller
 {
@@ -23,42 +20,43 @@ class ContactsController extends Controller
     private $contactsService;
 
     /**
-     * @var AddressService
-     */
-    private $addressService;
-
-    /**
      * @param Contact $contact
      * @param ContactsService $contactsService
-     * @param AddressService $addressService
      */
     public function __construct(
         Contact $contact,
-        ContactsService $contactsService,
-        AddressService $addressService
+        ContactsService $contactsService
     ) {
         $this->contact = $contact;
         $this->contactsService = $contactsService;
-        $this->addressService = $addressService;
         $this->middleware('auth');
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return mixed
      */
     public function index()
     {
         $userId = auth()->user()->id;
-        $contacts = $this->contact->where('user_id', $userId)->get();
+        $contactsServiceResponse = $this->contactsService->all($userId);
+
+        if (!$contactsServiceResponse->success) {
+            return redirect(url()->previous())->withError(
+                $contactsServiceResponse->message
+            );
+        }
+
+        $contacts = $contactsServiceResponse->data;
+
         return view('contacts', compact('contacts'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return mixed
      */
     public function create()
     {
@@ -68,58 +66,87 @@ class ContactsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param ContactStoreRequest $contactStoreRequest
+     * @return mixed
      */
-    public function store(Request $request)
+    public function store(ContactStoreRequest $contactStoreRequest)
     {
-        $this->contactsService->create($request);
+        $contactsServiceResponse = $this->contactsService->create(
+            $contactStoreRequest
+        );
 
-        return redirect('/contacts');
+        if (!$contactsServiceResponse->success) {
+            return redirect(url()->previous())->withError(
+                $contactsServiceResponse->message
+            );
+        }
+
+        $contactName = $contactsServiceResponse->data->name;
+
+        return redirect('/contacts')->withSuccess(
+            'Contato ' . $contactName . ' criado com sucesso!'
+        );
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
-    {
-        //
-    }
-
-    /**
+     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
+     * @param int $contactId
+     * @return mixed
      */
-    public function edit(User $user)
+    public function edit($contactId)
     {
-        //
+        $contactResponse = $this->contactsService->find($contactId);
+        $contact = $contactResponse->data;
+        $address = $contact->address()->get()->first();
+        return view('contactsFormEdit', compact('contact', 'address'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
+     * @param \App\Http\Requests\ContactUpdateRequest $contactUpdateRequest
+     * @param int $contactId
+     * @return mixed
      */
-    public function update(Request $request, User $user)
-    {
-        //
+    public function update(
+        ContactUpdateRequest $contactUpdateRequest,
+        $contactId
+    ) {
+        $contactsServiceResponse = $this->contactsService->update(
+            $contactUpdateRequest,
+            $contactId
+        );
+
+        if (!$contactsServiceResponse->success) {
+            return redirect(url()->previous())->withError(
+                $contactsServiceResponse->message
+            );
+        }
+
+        return redirect('/contacts')->withSuccess(
+            $contactsServiceResponse->message
+        );
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
+     * @param int $contactId
+     * @return mixed
      */
-    public function destroy(User $user)
+    public function destroy($contactId)
     {
-        //
+        $contactsServiceResponse = $this->contactsService->delete($contactId);
+
+        if (!$contactsServiceResponse->success) {
+            return redirect(url()->previous())->withError(
+                $contactsServiceResponse->message
+            );
+        }
+
+        return redirect('/contacts')->withSuccess(
+            $contactsServiceResponse->message
+        );
     }
 }
