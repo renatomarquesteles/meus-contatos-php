@@ -5,6 +5,8 @@ namespace App\Http\Services;
 use DB;
 use App\Models\Address;
 use App\Models\Contact;
+use App\Mail\NewContact;
+use Illuminate\Support\Facades\Mail;
 use App\Repositories\AddressRepository;
 use App\Repositories\ContactRepository;
 use App\Http\Services\Params\AddressParams;
@@ -108,6 +110,8 @@ class ContactsService
             $contact = $this->contactRepository->createContact(
                 $contactParams->toArray()
             );
+
+            Mail::to(auth()->user()->email)->send(new NewContact($contact));
 
             DB::commit();
 
