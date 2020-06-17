@@ -17,34 +17,43 @@
                             <label for="name">Nome completo</label>
                             <input
                                 type="text"
-                                class="form-control"
+                                class="form-control @error('name') is-invalid @enderror"
                                 id="name"
                                 name="name"
                                 required
                                 autofocus
                             />
+                            @error('name')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="email">E-mail</label>
                             <input
                                 type="email"
-                                class="form-control"
+                                class="form-control @error('email') is-invalid @enderror"
                                 id="email"
                                 name="email"
-                                placeholder="nome@exemplo.com"
                                 required
+                                placeholder="nome@exemplo.com"
                             />
+                            @error('email')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="phone">Telefone/Celular</label>
                             <input
                                 type="text"
-                                class="form-control"
+                                class="form-control @error('phone') is-invalid @enderror"
                                 id="phone"
                                 name="phone"
-                                placeholder="(99)99999-9999"
                                 required
+                                placeholder="(99)99999-9999"
                             />
+                            @error('phone')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <hr />
@@ -54,15 +63,15 @@
                             <label for="zipcode">CEP</label>
                             <input
                                 type="text"
-                                class="form-control"
+                                class="form-control @error('zipcode') is-invalid @enderror"
                                 id="zipcode"
                                 name="zipcode"
-                                placeholder="99999-999"
                                 required
+                                placeholder="99999-999"
                             />
-                            <div class="invalid-feedback">
-                                Insira um CEP válido.
-                            </div>
+                            @error('zipcode')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <div class="form-row">
@@ -70,27 +79,27 @@
                                     <label for="street">Logradouro</label>
                                     <input
                                         type="text"
-                                        class="form-control"
+                                        class="form-control @error('street') is-invalid @enderror"
                                         id="street"
                                         name="street"
                                         required
                                     />
-                                    <div class="invalid-feedback">
-                                        O campo logradouro é obrigatório.
-                                    </div>
+                                    @error('street')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="col-md-4">
                                     <label for="number">Número</label>
                                     <input
                                         type="number"
-                                        class="form-control"
+                                        class="form-control @error('number') is-invalid @enderror"
                                         id="number"
                                         name="number"
                                         required
                                     />
-                                    <div class="invalid-feedback">
-                                        O campo número é obrigatório.
-                                    </div>
+                                    @error('number')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -98,23 +107,26 @@
                             <label for="complement">Complemento</label>
                             <input
                                 type="text"
-                                class="form-control"
+                                class="form-control @error('complement') is-invalid @enderror"
                                 id="complement"
                                 name="complement"
                             />
+                            @error('complement')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="neighborhood">Bairro</label>
                             <input
                                 type="text"
-                                class="form-control"
+                                class="form-control @error('neighborhood') is-invalid @enderror"
                                 id="neighborhood"
                                 name="neighborhood"
                                 required
                             />
-                            <div class="invalid-feedback">
-                                O campo bairro é obrigatório.
-                            </div>
+                            @error('neighborhood')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <div class="form-row">
@@ -122,27 +134,27 @@
                                     <label for="city">Cidade</label>
                                     <input
                                         type="text"
-                                        class="form-control"
+                                        class="form-control @error('city') is-invalid @enderror"
                                         id="city"
                                         name="city"
                                         required
                                     />
-                                    <div class="invalid-feedback">
-                                        O campo cidade é obrigatório.
-                                    </div>
+                                    @error('city')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="col-md-4">
                                     <label for="state">Estado</label>
                                     <input
                                         type="text"
-                                        class="form-control"
+                                        class="form-control @error('state') is-invalid @enderror"
                                         id="state"
                                         name="state"
                                         required
                                     />
-                                    <div class="invalid-feedback">
-                                        O campo estado é obrigatório.
-                                    </div>
+                                    @error('state')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
