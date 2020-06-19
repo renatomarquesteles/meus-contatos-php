@@ -33,8 +33,8 @@ class Address extends Model implements Transformable
     /**
      * Gets the address contacts
      */
-    public function contacts()
+    public function contact()
     {
-        return $this->hasMany('App\Models\Contact');
+        return $this->hasOne('App\Models\Contact');
     }
 }

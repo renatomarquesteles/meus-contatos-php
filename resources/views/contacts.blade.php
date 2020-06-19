@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', '- Lista de Contatos')
+@section('title', 'Lista de Contatos | ')
 
 @section('content')
 <div class="container">
@@ -33,7 +33,20 @@
                         </thead>
                         <tbody>
                             @foreach ($contacts as $contact)
-                            <tr>
+                            <tr
+                                data-toggle="modal"
+                                data-target="#contactModal"
+                                data-name="{{ $contact->name }}"
+                                data-email="{{ $contact->email }}"
+                                data-phone="{{ $contact->phone }}"
+                                data-zipcode="{{ $contact->address->zipcode }}"
+                                data-street="{{ $contact->address->street }}"
+                                data-number="{{ $contact->address->number }}"
+                                data-complement="{{ $contact->address->complement ?? '' }}"
+                                data-neighborhood="{{ $contact->address->neighborhood }}"
+                                data-city="{{ $contact->address->city }}"
+                                data-state="{{ $contact->address->state }}"
+                            >
                                 <th scope="row">{{ $contact->id }}</th>
                                 <td>{{ $contact->name }}</td>
                                 <td>{{ $contact->email }}</td>
@@ -69,6 +82,35 @@
                     <p>Nenhum contato encontrado.</p>
                     @endif
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="contactModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Contato</strong></p>
+                <p><span id="phone"></span></p>
+                <p><span id="email"></span></p>
+                <hr />
+                <p><strong>Endereço</strong></p>
+                <p>CEP: <span id="zipcode"></span></p>
+                <p>Rua: <span id="street"></span>, <span id="number"></span></p>
+                <p id="complement"></p>
+                <p>Bairro: <span id="neighborhood"></span></p>
+                <p>Cidade: <span id="city"></span> - <span id="state"></span></p>
             </div>
         </div>
     </div>
