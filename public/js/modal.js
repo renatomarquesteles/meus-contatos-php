@@ -27,4 +27,12 @@ $(document).ready(function() {
             .find('.modal-body #complement')
             .text(complement && 'Complemento: ' + complement);
     });
+
+    $('#editContactBtn').click(function (event) {
+        event.stopPropagation();
+    });
+
+    $('#removeContactBtn').click(function (event) {
+        event.stopPropagation();
+    });
 });

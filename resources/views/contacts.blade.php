@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Lista de Contatos | ')
+@section('title', 'Lista de Contatos')
 
 @section('content')
 <div class="container">
@@ -34,6 +34,7 @@
                         <tbody>
                             @foreach ($contacts as $contact)
                             <tr
+                                role="button"
                                 data-toggle="modal"
                                 data-target="#contactModal"
                                 data-name="{{ $contact->name }}"
@@ -54,6 +55,7 @@
                                 <td>
                                     <div class="d-flex">
                                         <a
+                                            id="editContactBtn"
                                             class="btn btn-outline-secondary btn-sm"
                                             href="/contacts/{{ $contact->id }}/edit"
                                         >
@@ -66,6 +68,7 @@
                                             @method('DELETE')
                                             @csrf
                                             <button
+                                                id="removeContactBtn"
                                                 class="btn btn-outline-danger btn-sm ml-2"
                                                 type="submit"
                                             >
