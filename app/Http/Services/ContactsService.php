@@ -2,10 +2,12 @@
 
 namespace App\Http\Services;
 
+use App\Events\NewContactEvent;
 use DB;
 use App\Models\Address;
 use App\Models\Contact;
-use App\Mail\NewContact;
+use App\Jobs\NewContact;
+use App\Mail\NewContactMail;
 use Illuminate\Support\Facades\Mail;
 use App\Repositories\AddressRepository;
 use App\Repositories\ContactRepository;
@@ -111,7 +113,9 @@ class ContactsService
                 $contactParams->toArray()
             );
 
-            Mail::to(auth()->user()->email)->send(new NewContact($contact));
+            // Mail::to(auth()->user()->email)->send(new NewContactMail($contact));
+            // NewContact::dispatch($contact)->delay(now()->addSeconds('15'));
+            event(new NewContactEvent($contact));
 
             DB::commit();
 

@@ -6,9 +6,8 @@ use App\Models\Contact;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class NewContact extends Mailable
+class NewContactMail extends Mailable
 {
     use Queueable;
     use SerializesModels;
@@ -42,8 +41,16 @@ class NewContact extends Mailable
             ->subject('Novo contato adicionado!')
             ->view('emails.newContact')
             ->with([
-                'contactName' => $this->contact->name,
-                'contactPhone' => $this->contact->phone,
+                'name'         => $this->contact->name,
+                'email'        => $this->contact->email,
+                'phone'        => $this->contact->phone,
+                'zipcode'      => '',
+                'street'       => '',
+                'number'       => '',
+                'complement'   => '',
+                'neighborhood' => '',
+                'city'         => '',
+                'state'        => ''
             ]);
     }
 }
