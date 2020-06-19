@@ -2,12 +2,13 @@
 
 namespace App\Http\Services;
 
-use App\Events\NewContactEvent;
 use DB;
+use App\Models\User;
 use App\Models\Address;
 use App\Models\Contact;
 use App\Jobs\NewContact;
 use App\Mail\NewContactMail;
+use App\Events\NewContactEvent;
 use Illuminate\Support\Facades\Mail;
 use App\Repositories\AddressRepository;
 use App\Repositories\ContactRepository;
@@ -17,6 +18,11 @@ use App\Http\Services\Responses\ServiceResponse;
 
 class ContactsService
 {
+    /**
+     * @var User
+     */
+    private $user;
+
     /**
      * @var Contact
      */
@@ -44,11 +50,13 @@ class ContactsService
      * @param AddressRepository $addressRepository
      */
     public function __construct(
+        User $user,
         Contact $contact,
         Address $address,
         ContactRepository $contactRepository,
         AddressRepository $addressRepository
     ) {
+        $this->user = $user;
         $this->contact = $contact;
         $this->address = $address;
         $this->contactRepository = $contactRepository;
@@ -79,10 +87,11 @@ class ContactsService
         }
     }
 
-    public function create($params)
+    public function create($params, $userId)
     {
         DB::beginTransaction();
         try {
+            $user = $this->user->find($userId);
             $addressParams = new AddressParams(
                 $params->zipcode,
                 $params->street,
@@ -102,7 +111,7 @@ class ContactsService
             $address = $addressResponse->data;
 
             $contactParams = new ContactParams(
-                auth()->user()->id,
+                $user->id,
                 $params->name,
                 $params->email,
                 $params->phone,
@@ -113,9 +122,7 @@ class ContactsService
                 $contactParams->toArray()
             );
 
-            // Mail::to(auth()->user()->email)->send(new NewContactMail($contact));
-            // NewContact::dispatch($contact)->delay(now()->addSeconds('15'));
-            event(new NewContactEvent($contact));
+            event(new NewContactEvent($contact, $user->email));
 
             DB::commit();
 
@@ -148,10 +155,11 @@ class ContactsService
         }
     }
 
-    public function update($params, $contactId)
+    public function update($params, $contactId, $userId)
     {
         DB::beginTransaction();
         try {
+            $user = $this->user->find($userId);
             $addressParams = new AddressParams(
                 $params->zipcode,
                 $params->street,
@@ -171,7 +179,7 @@ class ContactsService
             }
 
             $contactParams = new ContactParams(
-                auth()->user()->id,
+                $user->id,
                 $params->name,
                 $params->email,
                 $params->phone,

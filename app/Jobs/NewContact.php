@@ -31,13 +31,19 @@ class NewContact implements ShouldQueue
     private $contact;
 
     /**
+     * @var string
+     */
+    private $email;
+
+    /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Contact $contact)
+    public function __construct(Contact $contact, string $email)
     {
         $this->contact = $contact;
+        $this->email = $email;
     }
 
     /**
@@ -47,6 +53,6 @@ class NewContact implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to(auth()->user()->email)->send(new NewContactMail($this->contact));
+        Mail::to($this->email)->send(new NewContactMail($this->contact));
     }
 }

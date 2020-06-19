@@ -17,7 +17,15 @@ class NewContactEvent
     use InteractsWithSockets;
     use SerializesModels;
 
+    /**
+     * @var Contact
+     */
     public $contact;
+
+    /**
+     * @var string
+     */
+    public $email;
 
     /**
      * Create a new event instance.
@@ -25,9 +33,10 @@ class NewContactEvent
      * @param Contact $contact
      * @return void
      */
-    public function __construct(Contact $contact)
+    public function __construct(Contact $contact, string $email)
     {
         $this->contact = $contact;
+        $this->email = $email;
     }
 
     /**

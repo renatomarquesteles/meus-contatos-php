@@ -27,6 +27,6 @@ class SendNewContactEmail implements ShouldQueue
      */
     public function handle(NewContactEvent $event)
     {
-        NewContact::dispatch($event->contact)->delay(now()->addSeconds('15'));
+        NewContact::dispatch($event->contact, $event->email);
     }
 }

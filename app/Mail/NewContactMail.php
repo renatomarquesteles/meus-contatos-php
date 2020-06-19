@@ -44,13 +44,6 @@ class NewContactMail extends Mailable
                 'name'         => $this->contact->name,
                 'email'        => $this->contact->email,
                 'phone'        => $this->contact->phone,
-                'zipcode'      => '',
-                'street'       => '',
-                'number'       => '',
-                'complement'   => '',
-                'neighborhood' => '',
-                'city'         => '',
-                'state'        => ''
             ]);
     }
 }

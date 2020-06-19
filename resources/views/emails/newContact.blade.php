@@ -25,18 +25,6 @@
                     <p><strong>E-mail:</strong> {{ $email }}</p>
                     <p><strong>Telefone:</strong> {{ $phone }}</p>
                 </div>
-                <div style="padding: 1px 15px; background: #eee; border-radius: 8px">
-                    <h2 style="font-size: 16px">Endereço</h2>
-                    <p><strong>CEP:</strong> {{ $zipcode }}</p>
-                    <p><strong>Rua:</strong> {{ $street }}</p>
-                    <p><strong>Nº:</strong> {{ $number }}</p>
-                    @isset($complement)
-                    <p><strong>Complemento:</strong> {{ $complement }}</p>
-                    @endisset
-                    <p><strong>Bairro:</strong> {{ $neighborhood }}</p>
-                    <p><strong>Cidade:</strong> {{ $city }}</p>
-                    <p><strong>Estado:</strong> {{ $state }}</p>
-                </div>
             </div>
         </main>
         <hr/>

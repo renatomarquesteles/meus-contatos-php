@@ -71,8 +71,10 @@ class ContactsController extends Controller
      */
     public function store(ContactStoreRequest $contactStoreRequest)
     {
+        $userId = auth()->user()->id;
         $contactsServiceResponse = $this->contactsService->create(
-            $contactStoreRequest
+            $contactStoreRequest,
+            $userId
         );
 
         if (!$contactsServiceResponse->success) {
@@ -113,9 +115,11 @@ class ContactsController extends Controller
         ContactUpdateRequest $contactUpdateRequest,
         $contactId
     ) {
+        $userId = auth()->user()->id;
         $contactsServiceResponse = $this->contactsService->update(
             $contactUpdateRequest,
-            $contactId
+            $contactId,
+            $userId
         );
 
         if (!$contactsServiceResponse->success) {
