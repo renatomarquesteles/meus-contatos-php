@@ -5,20 +5,29 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Verifique seu e-mail') }}</div>
-
+                <div class="card-header">
+                    {{ __('auth/verify.verify_email') }}
+                </div>
                 <div class="card-body">
                     @if (session('resent'))
-                        <div class="alert alert-success" role="alert">
-                            {{ __('Um novo link de verificação foi enviado para seu e-mail.') }}
-                        </div>
+                    <div class="alert alert-success" role="alert">
+                        {{ __('auth/verify.verification_link') }}
+                    </div>
                     @endif
-
-                    {{ __('Antes de continuar, por favor verifique seu e-mail por um link de verificação') }}
-                    {{ __('Se você não recebeu o e-mail') }},
-                    <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
+                    {{ __('auth/verify.check_email') }}
+                    {{ __('auth/verify.didnt_received_email') }},
+                    <form
+                        class="d-inline"
+                        method="POST"
+                        action="{{ route('verification.resend') }}"
+                    >
                         @csrf
-                        <button type="submit" class="btn btn-link p-0 m-0 align-baseline">{{ __('clique aqui para requisitar um novo') }}</button>.
+                        <button
+                            type="submit"
+                            class="btn btn-link p-0 m-0 align-baseline"
+                        >
+                            {{ __('auth/verify.register_new') }}
+                        </button>.
                     </form>
                 </div>
             </div>
