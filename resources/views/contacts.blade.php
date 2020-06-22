@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Lista de Contatos')
+@section('title', __('contacts/list.contact_list'))
 
 @section('content')
 <div class="container">
@@ -13,22 +13,34 @@
                         href="/contacts/new"
                         role="button"
                     >
-                    + Criar Contato
+                    + {{ __('contacts/list.create_contact') }}
                     </a>
                 </p>
             </div>
             <div class="card">
-                <div class="card-header">Lista de Contatos</div>
+                <div class="card-header">
+                    {{ __('contacts/list.contact_list') }}
+                </div>
                 <div class="card-body">
                     @if (count($contacts) > 0)
                     <table class="table table-borderless table-hover">
                         <thead>
                             <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Nome</th>
-                                <th scope="col">E-mail</th>
-                                <th scope="col">Telefone</th>
-                                <th scope="col">Ações</th>
+                                <th scope="col">
+                                    {{ __('contacts/list.id') }}
+                                </th>
+                                <th scope="col">
+                                    {{ __('contacts/list.name') }}
+                                </th>
+                                <th scope="col">
+                                    {{ __('contacts/list.email') }}
+                                </th>
+                                <th scope="col">
+                                    {{ __('contacts/list.phone') }}
+                                </th>
+                                <th scope="col">
+                                    {{ __('contacts/list.actions') }}
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -59,7 +71,7 @@
                                             class="btn btn-outline-secondary btn-sm"
                                             href="/contacts/{{ $contact->id }}/edit"
                                         >
-                                        Editar
+                                        {{ __('contacts/list.edit') }}
                                         </a>
                                         <form
                                             action="/contacts/{{ $contact->id }}"
@@ -72,7 +84,7 @@
                                                 class="btn btn-outline-danger btn-sm ml-2"
                                                 type="submit"
                                             >
-                                            Remover
+                                            {{ __('contacts/list.remove') }}
                                             </button>
                                         </form>
                                     </div>
@@ -82,7 +94,7 @@
                         </tbody>
                     </table>
                     @else
-                    <p>Nenhum contato encontrado.</p>
+                    <p>{{ __('contacts/list.empty_list') }}</p>
                     @endif
                 </div>
             </div>
@@ -104,16 +116,16 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p><strong>Contato</strong></p>
+                <p><strong>{{ __('contacts/list.contact') }}</strong></p>
                 <p><span id="phone"></span></p>
                 <p><span id="email"></span></p>
                 <hr />
-                <p><strong>Endereço</strong></p>
-                <p>CEP: <span id="zipcode"></span></p>
-                <p>Rua: <span id="street"></span>, <span id="number"></span></p>
+                <p><strong>{{ __('contacts/list.address') }}</strong></p>
+                <p>{{ __('contacts/list.zipcode') }}: <span id="zipcode"></span></p>
+                <p>{{ __('contacts/list.street') }}: <span id="street"></span>, <span id="number"></span></p>
                 <p id="complement"></p>
-                <p>Bairro: <span id="neighborhood"></span></p>
-                <p>Cidade: <span id="city"></span> - <span id="state"></span></p>
+                <p>{{ __('contacts/list.neighborhood') }}: <span id="neighborhood"></span></p>
+                <p>{{ __('contacts/list.city') }}: <span id="city"></span> - <span id="state"></span></p>
             </div>
         </div>
     </div>
