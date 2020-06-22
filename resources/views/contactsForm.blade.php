@@ -49,7 +49,7 @@
                                 class="form-control @error('phone') is-invalid @enderror"
                                 id="phone"
                                 name="phone"
-                                placeholder="Ex.: (00) 00000-0000"
+                                placeholder="Ex.: (00) 0000-0000 ou (00) 00000-0000"
                                 autocomplete="off"
                                 required
                             />
