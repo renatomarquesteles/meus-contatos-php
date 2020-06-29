@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Contact;
 use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
@@ -35,6 +36,6 @@ class Address extends Model implements Transformable
      */
     public function contact()
     {
-        return $this->hasOne('App\Models\Contact');
+        return $this->hasOne(Contact::class);
     }
 }

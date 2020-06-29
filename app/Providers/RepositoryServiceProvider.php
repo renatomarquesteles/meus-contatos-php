@@ -2,7 +2,13 @@
 
 namespace App\Providers;
 
+use App\Repositories\UserRepository;
+use App\Repositories\AddressRepository;
+use App\Repositories\ContactRepository;
 use Illuminate\Support\ServiceProvider;
+use App\Repositories\UserRepositoryEloquent;
+use App\Repositories\AddressRepositoryEloquent;
+use App\Repositories\ContactRepositoryEloquent;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -14,17 +20,17 @@ class RepositoryServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(
-            \App\Repositories\ContactRepository::class,
-            \App\Repositories\ContactRepositoryEloquent::class
+            ContactRepository::class,
+            ContactRepositoryEloquent::class
         );
         $this->app->bind(
-            \App\Repositories\AddressRepository::class,
-            \App\Repositories\AddressRepositoryEloquent::class
+            AddressRepository::class,
+            AddressRepositoryEloquent::class
         );
 
         $this->app->bind(
-            \App\Repositories\UserRepository::class,
-            \App\Repositories\UserRepositoryEloquent::class
+            UserRepository::class,
+            UserRepositoryEloquent::class
         );
     }
 

@@ -87,11 +87,12 @@ class ContactsService
         }
     }
 
-    public function create($params, $userId)
+    public function create($params)
     {
         DB::beginTransaction();
         try {
-            $user = $this->user->find($userId);
+            $user = $this->user->find($params->userId);
+
             $addressParams = new AddressParams(
                 $params->zipcode,
                 $params->street,
@@ -118,13 +119,35 @@ class ContactsService
                 $address->id
             );
 
-            $contact = $this->contactRepository->createContact(
-                $contactParams->toArray()
-            );
+            $contactResponse = $this->createContact($contactParams);
+
+            if (!$contactResponse->success) {
+                return $contactResponse;
+            }
+
+            $contact = $contactResponse->data;
 
             event(new NewContactEvent($contact, $user->email));
 
             DB::commit();
+
+            return new ServiceResponse(
+                true,
+                'Contato criado com sucesso',
+                $contact
+            );
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return new ServiceResponse(false, 'Erro ao criar contato', $th);
+        }
+    }
+
+    public function createContact(ContactParams $contactParams)
+    {
+        try {
+            $contact = $this->contactRepository->createContact(
+                $contactParams->toArray()
+            );
 
             return new ServiceResponse(
                 true,

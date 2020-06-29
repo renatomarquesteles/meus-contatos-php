@@ -6,6 +6,7 @@ use App\Http\Requests\ContactStoreRequest;
 use App\Http\Requests\ContactUpdateRequest;
 use App\Models\Contact;
 use App\Http\Services\ContactsService;
+use App\Http\Services\Params\CreateContactServiceParams;
 
 class ContactsController extends Controller
 {
@@ -66,16 +67,28 @@ class ContactsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param ContactStoreRequest $contactStoreRequest
+     * @param ContactStoreRequest $request
      * @return mixed
      */
-    public function store(ContactStoreRequest $contactStoreRequest)
+    public function store(ContactStoreRequest $request)
     {
         $userId = auth()->user()->id;
-        $contactsServiceResponse = $this->contactsService->create(
-            $contactStoreRequest,
-            $userId
+
+        $params = new CreateContactServiceParams(
+            $userId,
+            $request->name,
+            $request->email,
+            $request->phone,
+            $request->zipcode,
+            $request->street,
+            $request->number,
+            $request->neighborhood,
+            $request->city,
+            $request->state,
+            $request->complement ?? ''
         );
+
+        $contactsServiceResponse = $this->contactsService->create($params);
 
         if (!$contactsServiceResponse->success) {
             return redirect(url()->previous())->withError(
