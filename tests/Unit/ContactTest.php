@@ -39,7 +39,7 @@ class ContactTest extends TestCase
             $faker->buildingNumber,
             $faker->words(2, true),
             $faker->city,
-            $faker->state,
+            $faker->stateAbbr,
             $faker->secondaryAddress
         );
 
@@ -91,7 +91,7 @@ class ContactTest extends TestCase
             $faker->buildingNumber,
             $faker->words(2, true),
             $faker->city,
-            $faker->state,
+            $faker->stateAbbr,
             $faker->secondaryAddress
         );
 
@@ -116,7 +116,7 @@ class ContactTest extends TestCase
             $faker->buildingNumber,
             $faker->words(2, true),
             $faker->city,
-            $faker->state,
+            $faker->stateAbbr,
             $faker->secondaryAddress
         );
 
@@ -199,7 +199,7 @@ class ContactTest extends TestCase
             $faker->buildingNumber,
             $faker->words(2, true),
             $faker->city,
-            $faker->state,
+            $faker->stateAbbr,
             $faker->secondaryAddress
         );
 
