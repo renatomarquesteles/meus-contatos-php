@@ -7,6 +7,7 @@ use App\Http\Requests\ContactUpdateRequest;
 use App\Models\Contact;
 use App\Http\Services\ContactsService;
 use App\Http\Services\Params\CreateContactServiceParams;
+use App\Http\Services\Params\UpdateContactServiceParams;
 
 class ContactsController extends Controller
 {
@@ -120,20 +121,32 @@ class ContactsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \App\Http\Requests\ContactUpdateRequest $contactUpdateRequest
+     * @param \App\Http\Requests\ContactUpdateRequest $request
      * @param int $contactId
      * @return mixed
      */
     public function update(
-        ContactUpdateRequest $contactUpdateRequest,
+        ContactUpdateRequest $request,
         $contactId
     ) {
         $userId = auth()->user()->id;
-        $contactsServiceResponse = $this->contactsService->update(
-            $contactUpdateRequest,
+
+        $params = new UpdateContactServiceParams(
+            $userId,
             $contactId,
-            $userId
+            $request->name,
+            $request->email,
+            $request->phone,
+            $request->zipcode,
+            $request->street,
+            $request->number,
+            $request->neighborhood,
+            $request->city,
+            $request->state,
+            $request->complement ?? ''
         );
+
+        $contactsServiceResponse = $this->contactsService->update($params);
 
         if (!$contactsServiceResponse->success) {
             return redirect(url()->previous())->withError(

@@ -178,11 +178,13 @@ class ContactsService
         }
     }
 
-    public function update($params, $contactId, $userId)
+    public function update($params)
     {
         DB::beginTransaction();
         try {
-            $user = $this->user->find($userId);
+            $user = $this->user->find($params->userId);
+            $contact = $this->contactRepository->findContact($params->contactId);
+
             $addressParams = new AddressParams(
                 $params->zipcode,
                 $params->street,
@@ -193,8 +195,8 @@ class ContactsService
                 $params->complement ?? null
             );
 
-            $contact = $this->contactRepository->findContact($contactId);
             $addressId = $contact->address_id;
+
             $addressResponse = $this->updateAddress($addressParams, $addressId);
 
             if (!$addressResponse->success) {
@@ -209,19 +211,43 @@ class ContactsService
                 $addressId
             );
 
-            $updatedContact = $this->contactRepository->updateContact(
+            $contactResponse = $this->updateContact(
                 $contactParams,
-                $contactId
+                $params->contactId
             );
+
+            if (!$contactResponse->success) {
+                return $contactResponse;
+            }
 
             DB::commit();
 
+            $updatedContact = $contactResponse->data;
             $contactName = $updatedContact->name;
 
             return new ServiceResponse(
                 true,
                 'Contato ' . $contactName . ' atualizado com sucesso!',
                 $updatedContact
+            );
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return new ServiceResponse(false, 'Erro ao atualizar contato', $th);
+        }
+    }
+
+    public function updateContact(ContactParams $contactParams, int $contactId)
+    {
+        try {
+            $contact = $this->contactRepository->updateContact(
+                $contactParams,
+                $contactId
+            );
+
+            return new ServiceResponse(
+                true,
+                'Contato atualizado com sucesso',
+                $contact
             );
         } catch (\Throwable $th) {
             DB::rollback();
@@ -244,11 +270,7 @@ class ContactsService
             );
         } catch (\Throwable $th) {
             DB::rollback();
-            return new ServiceResponse(
-                false,
-                'Erro ao atualizar endereço',
-                $th
-            );
+            return new ServiceResponse(false, 'Erro ao atualizar endereço', $th);
         }
     }
 
