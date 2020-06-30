@@ -11,15 +11,13 @@ class ContactParams extends BaseServiceParams
     public $email;
     public $phone;
     public $address_id;
-    public $avatar;
 
     public function __construct(
         int $user_id,
         string $name,
         string $email,
         string $phone,
-        int $address_id,
-        string $avatar = ''
+        int $address_id
     ) {
         parent::__construct();
     }

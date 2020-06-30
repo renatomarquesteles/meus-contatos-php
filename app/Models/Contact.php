@@ -28,7 +28,6 @@ class Contact extends Model implements Transformable
         'name',
         'email',
         'phone',
-        'avatar',
         'user_id',
         'address_id',
     ];
